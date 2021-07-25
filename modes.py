@@ -19,6 +19,7 @@ from math import ceil, floor
 from PIL import Image, ImageDraw, ImageFont
 from colorsys import hsv_to_rgb
 
+DEBUG = False
         ############# Simple example. For Blender we just set up a few key assignments with corresponding images.
         ## Blender ## To be honest: Blender is just the minimalistic example here. Blender is very keyboard centric
         ############# and you should get used to the real shortcuts as it is much more efficient to stay on the keyboard all the time.
@@ -176,43 +177,67 @@ class ModeFallback:
         pass
 
     def activate(self, device):
-        print("Mode Fallback")
-        print("Clearscreen")
+        if DEBUG:
+            print("Clearscreen")
         device.sendTextFor(0, "000000 333333 888888") #Title
-        print("Text For 1 ")
-        device.sendTextFor(1, "0")
-        print("Color For 1 ")
+        
+        leds = []
+        for x in range(15):
+            leds.append(0x222222)
+        device.setLeds( leds)
+        
+
+        device.sendTextFor(1, "I inpoint")
         device.setKeyLedFor(1,"FF0000")
         
-        device.assignKey(KeyCode.SW1_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_SPACE, ActionCode.PRESS)]) #Play/pause
-        device.assignKey(KeyCode.SW1_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_SPACE, ActionCode.RELEASE)])
-
-        #Jog dial rotation
-        device.assignKey(KeyCode.JOG_CW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_RIGHT)]) #CW = Clock-wise, one frame forward
-        device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT)]) #CCW = Counter clock-wise, one frame back
+        device.assignKey(KeyCode.SW1_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_I, ActionCode.PRESS)]) #Play/pause
+        device.assignKey(KeyCode.SW1_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_I, ActionCode.RELEASE)])
 
         #Button2 (top left)
         
-        device.assignKey(KeyCode.SW2_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEYPAD_0, ActionCode.PRESS)]) #Set view to camera
-        device.assignKey(KeyCode.SW2_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEYPAD_0, ActionCode.RELEASE)])
+        device.sendTextFor(2, "^B cut")
+        device.setKeyLedFor(2,"888822")
+        device.assignKey(KeyCode.SW2_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS), event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_B, ActionCode.PRESS),event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_B, ActionCode.RELEASE),event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE)]) #Zoom to fill screen
+        device.assignKey(KeyCode.SW2_RELEASE, [])
 
         #Button3 (left, second from top)
-        device.assignKey(KeyCode.SW3_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEYPAD_DIVIDE, ActionCode.PRESS)]) #Isolation view
-        device.assignKey(KeyCode.SW3_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEYPAD_DIVIDE, ActionCode.RELEASE)])
+
+        device.sendTextFor(3, "O outpoint")
+        device.setKeyLedFor(3,"FF0000")
+        device.assignKey(KeyCode.SW3_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_O, ActionCode.PRESS)]) #Isolation view
+        device.assignKey(KeyCode.SW3_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_O, ActionCode.RELEASE)])
+
 
         #Button4 (left, third from top)
-        device.assignKey(KeyCode.SW4_PRESS, []) #Not used, set to nothing.
-        device.assignKey(KeyCode.SW4_RELEASE, [])
+        device.sendTextFor(4, "J pl. back")
+        device.setKeyLedFor(4,"00FF00")
+        device.assignKey(KeyCode.SW4_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_J, ActionCode.PRESS)]) #Isolation view
+        device.assignKey(KeyCode.SW4_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_J, ActionCode.RELEASE)])
 
+
+        #Jog dial rotation
+        device.sendTextFor(7, "left(right")
+        device.assignKey(KeyCode.JOG_CW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_RIGHT)]) #CW = Clock-wise, one frame forward
+        device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT)]) #CCW = Counter clock-wise, one frame back   
+        
         #Button5 (bottom left)
-        device.assignKey(KeyCode.SW5_PRESS, []) #Not used, set to nothing.
-        device.assignKey(KeyCode.SW5_RELEASE, [])
+        device.sendTextFor(5, "K stop")
+        device.setKeyLedFor(5,"00FF00")
+        device.assignKey(KeyCode.SW5_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_K, ActionCode.PRESS)]) #Isolation view
+        device.assignKey(KeyCode.SW5_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_K, ActionCode.RELEASE)])
 
         #Button6 (top right)
         
-        device.assignKey(KeyCode.SW6_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEYPAD_DOT, ActionCode.PRESS)]) #Center on selection
-        device.assignKey(KeyCode.SW6_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEYPAD_DOT, ActionCode.RELEASE)])
-        
+        device.sendTextFor(6, "L Stop")
+        device.setKeyLedFor(6,"00FF00")
+        device.assignKey(KeyCode.SW6_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_L, ActionCode.PRESS)]) #Isolation view
+        device.assignKey(KeyCode.SW6_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_L, ActionCode.RELEASE)])
+
+        device.assignKey(KeyCode.JOG_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_X, ActionCode.PRESS)]) #Play/pause
+        device.assignKey(KeyCode.JOG_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_X, ActionCode.RELEASE)])
+
+
+
 
     def poll(self, device):
         return False
@@ -230,8 +255,11 @@ class ModeDaVinciCut:
         pass
 
     def activate(self, device):
-        device.sendTextFor(0, "FFFFFF 333333 000000") #Clearscreen
+        device.sendTextFor(0, "AAAAAA 080808 000000") #Clearscreen
 
+        device.setLeds ("")
+
+        
         print("Activating Mode Davinci")
 
         #Button4 (left, third from top)
@@ -265,8 +293,11 @@ class ModeDaVinciCut:
         #Button3
         device.assignKey(KeyCode.SW3_PRESS, []) #Set view to camera
         device.assignKey(KeyCode.SW3_RELEASE, [])
-
-        device.setLeds([0xFF0000,0x00FF00,0x0000FF,0xAA11FF,0xFF0000,0x00FF00,0x0000FF,0xAA11FF,0xFF0000,0x00FF00,0x0000FF,0xAA11FF,0xFF0000,0x00FF00,0x0000FF])
+        
+        leds = []
+        for x in range(6):
+            leds.append([0x222222]  )
+        device.setLeds( leds)
 
     def poll(self, device):
         return False

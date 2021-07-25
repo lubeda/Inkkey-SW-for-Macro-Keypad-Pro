@@ -229,9 +229,7 @@ class Device:
         self.sendImage(x, y, img)
 
     def setLeds(self, leds):
-        print (leds)
         ledStr = ['{:06x}'.format(i) for i in leds]
-        print (ledStr)
         self.ledTime = time.time()
         self.ledState = leds
         self.sendLed(ledStr)

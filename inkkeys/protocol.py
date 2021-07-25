@@ -25,8 +25,6 @@ class RefreshTypeCode(Enum):
     OFF = "o"
     
 class KeyCode(Enum):
-    JOG_PRESS = "1p"
-    JOG_RELEASE = "1r"
     SW1_PRESS = "1p"   #Alias
     SW1_RELEASE = "1r" #Alias
     SW2_PRESS = "2p"
@@ -39,12 +37,9 @@ class KeyCode(Enum):
     SW5_RELEASE = "5r"
     SW6_PRESS = "6p"
     SW6_RELEASE = "6r"
-    SW7_PRESS = "7p"
-    SW7_RELEASE = "7r"
-    SW8_PRESS = "8p"
-    SW8_RELEASE = "8r"
-    SW9_PRESS = "9p"
-    SW9_RELEASE = "9r"
+    JOG_PRESS = "7p"
+    JOG_RELEASE = "7r"
+    # R+ / R-
     JOG_CW = "R+"
     JOG_CCW = "R-"
     JOG = "R" # Only for callbacks!
