@@ -233,8 +233,8 @@ class ModeFallback:
         device.assignKey(KeyCode.SW6_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_L, ActionCode.PRESS)]) #Isolation view
         device.assignKey(KeyCode.SW6_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_L, ActionCode.RELEASE)])
 
-        device.assignKey(KeyCode.JOG_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_X, ActionCode.PRESS)]) #Play/pause
-        device.assignKey(KeyCode.JOG_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_X, ActionCode.RELEASE)])
+        device.assignKey(KeyCode.JOG_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_SPACE, ActionCode.PRESS)]) #Play/pause
+        device.assignKey(KeyCode.JOG_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_SPACE, ActionCode.RELEASE)])
 
 
 
