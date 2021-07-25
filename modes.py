@@ -255,50 +255,76 @@ class ModeDaVinciCut:
         pass
 
     def activate(self, device):
-        device.sendTextFor(0, "AAAAAA 080808 000000") #Clearscreen
+        device.sendTextFor(0, "BBBBBB 080808 000000") #Clearscreen
 
-        device.setLeds ("")
-
+        leds = []
+        for x in range(15):
+            leds.append(0x220022)
         
+        device.setLeds( leds)
+   
         print("Activating Mode Davinci")
+#Button 7 Jog Strg+F
+        device.assignKey(KeyCode.JOG_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS),
+         event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_F, ActionCode.PRESS)])
+        device.assignKey(KeyCode.JOG_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_F, ActionCode.RELEASE), 
+         event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE)])
 
-        #Button4 (left, third from top)
-        device.sendTextFor(4,"J back <<")
-        device.setKeyLedFor(4,"FF0000")
-        device.assignKey(KeyCode.SW4_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_J, ActionCode.PRESS)]) #Play/pause
-        device.assignKey(KeyCode.SW4_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_K, ActionCode.RELEASE)])
+
+ #Button1
+        device.sendTextFor(1,"clip link")
+        device.setKeyLedFor(1,"888800")
+        #  Alt + Strg + L 
+        
+        device.assignKey(KeyCode.SW1_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT, ActionCode.PRESS), 
+         event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS),
+         event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_L, ActionCode.PRESS)])
+        device.assignKey(KeyCode.SW1_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_L, ActionCode.RELEASE), 
+         event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE),
+         event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_ALT, ActionCode.RELEASE)])
+
+        device.sendTextFor(2,"split clip")
+        device.setKeyLedFor(2,"AA0000")
+        #  Strg + #
+        
+        device.assignKey(KeyCode.SW2_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.PRESS),
+         event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_BACKSLASH, ActionCode.PRESS)])
+        device.assignKey(KeyCode.SW2_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_BACKSLASH, ActionCode.RELEASE), 
+         event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_CTRL, ActionCode.RELEASE)])
+
+        device.sendTextFor(3,"ripple clip")
+        device.setKeyLedFor(3,"EE0000")
+        
+        device.assignKey(KeyCode.SW3_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.PRESS),
+         event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_BACKSPACE, ActionCode.PRESS)])
+        device.assignKey(KeyCode.SW3_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_BACKSPACE, ActionCode.RELEASE), 
+         event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT_SHIFT, ActionCode.RELEASE)])
+
+        device.sendTextFor(4,"J reverse")
+        device.setKeyLedFor(4,"EE00EE")
+        
+        device.assignKey(KeyCode.SW4_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_J, ActionCode.PRESS)])
+        device.assignKey(KeyCode.SW4_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_J, ActionCode.RELEASE)])
+        
 
         device.sendTextFor(5,"K stop")
-        device.setKeyLedFor(5,"00FF00")
-        device.assignKey(KeyCode.SW5_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_K, ActionCode.PRESS)]) #Play/pause
+        device.setKeyLedFor(5,"AA0000")
+        
+        device.assignKey(KeyCode.SW5_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_K, ActionCode.PRESS)])
         device.assignKey(KeyCode.SW5_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_K, ActionCode.RELEASE)])
-
-        device.sendTextFor(6,"K stop")
-        device.setKeyLedFor(6,"0000FF")
-        device.assignKey(KeyCode.SW6_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_L, ActionCode.PRESS)]) #Play/pause
+        
+        device.sendTextFor(6,"L forward")
+        device.setKeyLedFor(6,"EE00EE")
+        
+        device.assignKey(KeyCode.SW6_PRESS, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_L, ActionCode.PRESS)])
         device.assignKey(KeyCode.SW6_RELEASE, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_L, ActionCode.RELEASE)])
 
+        device.sendTextFor(7,"Arrows")
         #Jog dial rotation
         device.assignKey(KeyCode.JOG_CW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_RIGHT)]) #CW = Clock-wise, one frame forward
         device.assignKey(KeyCode.JOG_CCW, [event(DeviceCode.KEYBOARD, KeyboardKeycode.KEY_LEFT)]) #CCW = Counter clock-wise, one frame back
 
-        #Button1
-        device.assignKey(KeyCode.SW1_PRESS, []) #Set view to camera
-        device.assignKey(KeyCode.SW1_RELEASE, [])
-
-        #Button2
-        device.assignKey(KeyCode.SW2_PRESS, []) #Set view to camera
-        device.assignKey(KeyCode.SW2_RELEASE, [])
-
-        #Button3
-        device.assignKey(KeyCode.SW3_PRESS, []) #Set view to camera
-        device.assignKey(KeyCode.SW3_RELEASE, [])
         
-        leds = []
-        for x in range(6):
-            leds.append([0x222222]  )
-        device.setLeds( leds)
-
     def poll(self, device):
         return False
     #Called to update the icon of button 4, showing the state of the office light (as if I couldn't see it in the real room, but it is a nice touch to update the display accordingly)
